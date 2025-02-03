@@ -1,0 +1,20 @@
+image: node:16
+
+stages:
+  - deploy
+
+cache:
+  paths:
+    - node_modules/
+
+deploy:
+  stage: deploy
+  script:
+    - npm ci
+    - npm run build
+  artifacts:
+    paths:
+      - build/
+  only:
+    - main  # Déployer uniquement à partir de la branche 'main'
+
