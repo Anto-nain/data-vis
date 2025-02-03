@@ -10,23 +10,24 @@ const App = () => {
   const [metadata, setMetadata] = useState([]);
   const [data, setData] = useState([]);
   
-  // Charger les données
+  
   useEffect(() => {
+    // Charger les données
     d3.csv(datacsv).then(data => {
-      const parseDate = d3.timeParse("%Y/%m/%d %H:%M");
       const parsedData = data.map(d => ({
-        date: d3.timeFormat("%Y/%m/%d")(parseDate(d.datetime)), // Garder la date (sans l'heure)
+        date: new Date(d.datetime.split(" ")[0]), // Garder la date (sans l'heure)
         height: +d.height,                                      // Convertir en nombre
         point_id: +d.point_id,                                  // Convertir en nombre
       }));
       setData(parsedData); // Mettre à jour l'état avec les nouvelles données
+      //console.log(parsedData);
     });
   }, []);
 
   // Charger la métadata
   useEffect(() => {
     d3.csv(metadatacsv).then(data => {
-      const parsedData = data.map(d => ({
+      const parsedMetadata = data.map(d => ({
         link: d.link,
         river: d.river,
         country: d.country,
@@ -35,7 +36,8 @@ const App = () => {
         geometry0: +d.geometry0, // Longitude
         geometry1: +d.geometry1  // Latitude
       }));
-      setMetadata(parsedData); // Mettre à jour l'état avec les nouvelles données
+      setMetadata(parsedMetadata); // Mettre à jour l'état avec les nouvelles données
+      //console.log(parsedMetadata);
     });
   }, []);
 
@@ -44,7 +46,7 @@ const App = () => {
   return (
     <div>
       <h1>World Map Visualization</h1>
-      {worldgeomap && metadata.length > 0 ? (
+      {worldgeomap && metadata.length > 0 && data.length > 0 ? (
         <Map worldData={worldgeomap} metadata={metadata} data={data} />
       ) : (
         <p>Loading map data...</p>
