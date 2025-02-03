@@ -6,7 +6,7 @@ number_of_files = 100
 counter = 0
 
 
-manifest = "copernicus_manifest.txt"
+manifest = "scripts/copernicus_manifest.txt"
 metadata = []
 data = []
 
@@ -17,17 +17,17 @@ for line in open(manifest):
         if response.status_code == 200:
             try:
                 # get metadata
+                point_id = counter
                 geometry = response.json()["geometry"]["coordinates"]
                 basin = response.json()["properties"]["basin"]
                 river = response.json()["properties"]["river"]
                 country = response.json()["properties"]["country"]
-                name = f"{basin}_{river}_{country}"
                 
                 # save metadata
                 meta = {}
+                meta["point_id"] = point_id
                 meta["geometry0"] = geometry[0]
                 meta["geometry1"] = geometry[1]
-                meta["name"] = name
                 meta["basin"] = basin
                 meta["river"] = river
                 meta["country"] = country
@@ -47,7 +47,7 @@ for line in open(manifest):
                 df = pd.DataFrame({
                     "datetime": datetimes,
                     "height": heights,
-                    "name": name
+                    "point_id": point_id
                 })
                 data.append(df)
                             
@@ -62,8 +62,8 @@ for line in open(manifest):
 
 #save metadata to csv
 metadata_df = pd.DataFrame(metadata)
-metadata_df.to_csv("copernicus_export/metadata.csv", index=False, sep=';')
+metadata_df.to_csv("data/metadata.csv", index=False, sep=',')
 
 #save data to csv
 data_df = pd.concat(data)
-data_df.to_csv("copernicus_export/data.csv", index=False, sep=';')
+data_df.to_csv("data/data.csv", index=False, sep=',')
