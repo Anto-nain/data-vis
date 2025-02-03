@@ -62,8 +62,8 @@ for line in open(manifest):
 
 #save metadata to csv
 metadata_df = pd.DataFrame(metadata)
-metadata_df.to_csv("data/metadata.csv", index=False, sep=',')
+metadata_df.to_csv("frontend/src/data/metadata.csv", index=False, sep=',')
 
 #save data to csv
 data_df = pd.concat(data)
-data_df.to_csv("data/data.csv", index=False, sep=',')
+data_df.to_csv("frontend/src/data/data.csv", index=False, sep=',')
