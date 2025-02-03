@@ -24,3 +24,26 @@ The script ```copernicus_data_export.py``` will download data from copernicus se
 python scripts/copernicus_data_export.py
 ```
 The data will be saved in the ```data``` folder.
+
+# Build and deploy
+To run build and deploy the app, you must execute the following commands in the ```frontend``` folder:
+**install all dependencies**
+```bash
+npm install
+```
+**build the app**
+```bash
+npm run build
+```
+**deploy locally to dev**
+```bash
+npm start
+ 
+```
+
+**deploy the app via github pages**
+```bash
+npm run deploy
+```
+
+The can now be accessed at the following adress : https://anto-nain.github.io/data-vis/
