@@ -1,11 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
+import getHeightColorScale from './heightcolorscale';
 
 // worldData est la géomap du monde
 // metadata est la metadata
 
 const Map = ({ worldData, metadata, data}) => { 
-  //console.log(metadata) 
+  console.log(metadata) 
+  console.log(data);
+
     useEffect(() => {
  
       const width = 800;
@@ -46,16 +49,42 @@ const Map = ({ worldData, metadata, data}) => {
         .attr("fill", "#ccc")
         .attr("stroke", "#fff")
         .attr("stroke-width", 0.5);
-  
+      
+      // Echelle de couleur pour nos points
+      const colorScale = d3.scaleLinear()
+        .domain([-1, 0, 1])  // Correspond à : (bien en dessous, à la moyenne, bien au dessus)
+        .range(["red", "white", "blue"]); // Rouge pour -1, blanc pour 0, bleu pour 1
+
+      // Calculer la hauteur actuelle et la couleur de chaque point
+      const pointsData = metadata.map((point) => {
+        const pointData = data.filter(d => d.point_id == point.point_id);
+
+        // Hauteur sélectionnée par date (la plus récente pour l'instant)
+        const selectedData = d3.max(pointData, d => d.date);        
+        const currentHeight = pointData.find(d => d.date == selectedData).height;
+
+        // série des hauteurs
+        const heightSerie = pointData.map(d => d.height);
+      
+        return {
+          ...point,
+          currentHeight,
+          heightSerie,
+        };
+      });
+    
+
+
+        
       // Plot data points
       g.selectAll("circle")
-        .data(metadata)
+        .data(pointsData)
         .enter()
         .append("circle")
         .attr("cx", d => projection([d.geometry0, d.geometry1])[0])
         .attr("cy", d => projection([d.geometry0, d.geometry1])[1])
         .attr("r", 2)
-        .attr("fill", "red")
+        .attr("fill", d => colorScale(getHeightColorScale(d.currentHeight, d.heightSerie)))
         .attr("stroke", "#000")
         .attr("stroke-width", 0.5)
         .append("title")
