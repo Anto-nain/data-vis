@@ -1,21 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <h1>Bienvenue sur mon projet de visualisation de données !</h1>
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Ce projet est déployé sur GitHub Pages. Si tu vois ceci, c'est que le déploiement a réussi.
         </p>
         <a
           className="App-link"
-          href="https://reactjs.org"
+          href="https://github.com/Anto-nain/data-vis"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          Voir le code source sur GitHub
         </a>
       </header>
     </div>
