@@ -1,0 +1,7 @@
+/.venv
+/.vscode
+/data
+
+/frontend/node_modules
+/frontend/build
+/frontend/dist
