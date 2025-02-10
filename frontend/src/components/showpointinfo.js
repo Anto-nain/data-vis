@@ -1,9 +1,10 @@
 import React from 'react';
 
 
-const showPointInfo = (point) => {
+const showPointInfo = (point,currentDate) => {
     const point_data = point.point;
-    console.log(point_data);
+    //console.log(point_data);
+    //console.log(currentDate);
 
     if (!point_data) {
         return <p>Select a point on the map to see its details.</p>;

@@ -57,8 +57,8 @@ const App = () => {
 
   // Fonction pour sélectionner un point sur la carte
   const handlePointClick = (point) => {
-    setSelectedPoint(point); // Mise à jour du point sélectionné
-    console.log(point);
+    setSelectedPoint(point,selectedDate); // Mise à jour du point sélectionné
+    //console.log(point);
   };
 
 

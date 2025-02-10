@@ -42,16 +42,6 @@ const Map = ({ worldData, metadata, data, selectedDate, onPointClick}) => {
   
       svg.call(zoom);
 
-      // Draw the world map
-      g.append("g")
-        .selectAll("path")
-        .data(worldData.features)
-        .enter()
-        .append("path")
-        .attr("d", path)
-        .attr("fill", "#ccc")
-        .attr("stroke", "#fff")
-        .attr("stroke-width", 0.5);
       
       // Echelle de couleur pour nos points
       const colorScale = d3.scaleLinear()
@@ -88,50 +78,35 @@ const Map = ({ worldData, metadata, data, selectedDate, onPointClick}) => {
         };
       }).filter(d => d !== null); // Supprimer les points sans données valides
 
-/*
-      // création de la heatmap
-      const gridSize = 10;
-      const canvas = document.createElement("canvas");
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext("2d");
 
-      // Créer une grille de points (heatmap) uniquement sur la terre
-      for (let x = 0; x < width; x += gridSize) {
-        for (let y = 0; y < height; y += gridSize) {
-          const [lon, lat] = projection.invert([x, y]); // Convertir en coord. géo
+      // Calculer la couleur moyenne pour chaque pays
+      const countryColors = {};
 
-          // Vérifier si le point est sur la terre
-          const isOnLand = worldData.features.some(feature => d3.geoContains(feature, [lon, lat]));
-          if (!isOnLand) continue; // On ignore l'eau
-
-          // Trouver le point de mesure le plus proche
-          const nearestPoint = pointsData.reduce((prev, curr) => {
-            const prevDist = Math.hypot(prev.geometry0 - lon, prev.geometry1 - lat);
-            const currDist = Math.hypot(curr.geometry0 - lon, curr.geometry1 - lat);
-            return currDist < prevDist ? curr : prev;
-          });
-
-          // Récupérer la couleur
-          const color = colorScale(getHeightColorScale(nearestPoint.currentHeight, pointsData.map(p => p.currentHeight)));
-
-          // Dessiner sur le canvas
-          ctx.fillStyle = color;
-          ctx.fillRect(x, y, gridSize, gridSize);
+      worldData.features.forEach(country => {
+        const countryPoints = pointsData.filter(point => d3.geoContains(country, [point.geometry0, point.geometry1]));
+        //console.log(countryPoints);
+        if (countryPoints.length > 0) {
+          // Calculer la couleur moyenne des points du pays
+          const avgColor = d3.mean(countryPoints, point => getHeightColorScale(point.currentHeight, point.heightSerie));
+          countryColors[country.properties.name] = colorScale(avgColor);
+          console.log(country.properties.name);
         }
-      }
+        else {
+          countryColors[country.properties.name] = "#ccc"; // Couleur par défaut
+        }
+      });
+      console.log(countryColors);
 
-      // Convertir le canvas en image DataURL
-      const heatmapImage = canvas.toDataURL();
-
-      // Appliquer comme fond du SVG
-      d3.select("#map")
-        .style("background", `url(${heatmapImage})`)
-        .style("background-size", "cover");
-      
-      */
-
-    
+      // Dessiner les pays avec leur couleur moyenne calculée
+      g.append("g")
+        .selectAll("path")
+        .data(worldData.features)
+        .enter()
+        .append("path")
+        .attr("d", path)
+        .attr("fill", d => countryColors[d.properties.name])  // Utilise la couleur moyenne calculée
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 0.5);
 
       // Plot data points
       g.selectAll("circle")
