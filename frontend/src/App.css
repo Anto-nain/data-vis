@@ -17,14 +17,31 @@
   width: 60%; /* Augmenter la largeur de la carte à 60% de la largeur */
   padding: 10px; /* Ajouter un petit padding */
   overflow: hidden; /* Empêche les débordements */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Aligne les éléments en haut */
 }
 
 .right-panel {
-  width: 40%; /* Ajuster le panneau de droite à 40% de la largeur */
   padding: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  flex-direction: column;
+  justify-content: flex-start; /* Aligne les éléments en haut */
+}
+
+.top-right {
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.top-left {
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  margin-bottom: 10px;
 }
 
 .top-left, .top-right {
@@ -60,21 +77,15 @@
 }
 
 /* Conteneurs de métadonnées et SVG */
-.metadata-box, .svg-box {
+.top-right, .bottom-right {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 50%; /* Divise l'espace verticalement en deux parties égales */
 }
 
-.metadata-box {
-  background-color: #eef;
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-}
 
-.svg-box {
+.bottom-right {
   background-color: #f1f1f1;
   padding: 10px;
   border-radius: 8px;

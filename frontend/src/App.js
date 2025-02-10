@@ -69,7 +69,7 @@ const App = () => {
       <div className="left-panel">
         <div className="top-left">
           {/* Affichage du titre et du date chooser */}
-          <h1>World Map Visualization</h1>
+          <h1 style={{ textAlign: 'center' }}>World Map Visualization</h1>
           <DateSlider selectedDate={selectedDate} setSelectedDate={setSelectedDate} data={data} />
         </div>
   

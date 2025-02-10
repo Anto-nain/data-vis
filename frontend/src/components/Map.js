@@ -95,7 +95,7 @@ const Map = ({ worldData, metadata, data, selectedDate, onPointClick}) => {
           countryColors[country.properties.name] = "#ccc"; // Couleur par défaut
         }
       });
-      console.log(countryColors);
+      //console.log(countryColors);
 
       // Dessiner les pays avec leur couleur moyenne calculée
       g.append("g")
