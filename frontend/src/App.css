@@ -1,23 +1,84 @@
-.App {
-  text-align: center;
+/* Container principal de l'application */
+.app-container {
+  display: flex;
+  flex-direction: row; /* Organisation horizontale : 2 panneaux */
+  height: 100vh; /* Prend toute la hauteur de la fenêtre */
+  width: 100vw; /* S'ajuste à toute la largeur */
+  overflow: hidden; /* Empêche le débordement des panneaux */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.left-panel, .right-panel {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  box-sizing: border-box; /* Assure que padding et bordure sont inclus dans la largeur/hauteur */
 }
 
-.App-link {
-  color: #61dafb;
+.left-panel {
+  width: 60%; /* Augmenter la largeur de la carte à 60% de la largeur */
+  padding: 10px; /* Ajouter un petit padding */
+  overflow: hidden; /* Empêche les débordements */
 }
+
+.right-panel {
+  width: 40%; /* Ajuster le panneau de droite à 40% de la largeur */
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.top-left, .top-right {
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.bottom-left, .bottom-right {
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.date-slider {
+  padding: 10px;
+  text-align: center;
+  background: #f0f0f0;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+/* La carte doit occuper toute la largeur et la hauteur de son conteneur */
+.map-container {
+  flex-grow: 1; /* Prend l'espace restant dans le panneau gauche */
+  height: 100%; /* Prend toute la hauteur disponible */
+  width: 100%; /* Prend toute la largeur disponible */
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  overflow: hidden;
+}
+
+/* Conteneurs de métadonnées et SVG */
+.metadata-box, .svg-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 50%; /* Divise l'espace verticalement en deux parties égales */
+}
+
+.metadata-box {
+  background-color: #eef;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.svg-box {
+  background-color: #f1f1f1;
+  padding: 10px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+

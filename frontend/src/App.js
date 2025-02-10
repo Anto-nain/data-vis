@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import './App.css';
 import Map from './components/Map';
 import DateSlider from "./components/DateSlider";
+import ShowPointInfo from "./components/showpointinfo";
 import * as d3 from 'd3';
 
-import worldgeomap from './data/world.json';
+import worldgeomap from './data/carte_light.geo.json';
 import metadatacsv from './data/metadata.csv';
 import datacsv from './data/data.csv';
 
@@ -11,6 +13,7 @@ const App = () => {
   const [metadata, setMetadata] = useState([]);
   const [data, setData] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedPoint, setSelectedPoint] = useState(null);
   //console.log(selectedDate);
   
   
@@ -47,22 +50,51 @@ const App = () => {
   // Sélectionner la première date disponible
   useEffect(() => {
     if (data.length > 0) {
-      const minDate = d3.min(data, d => d.date);
-      setSelectedDate(minDate);
+      const maxDate = d3.max(data, d => d.date);
+      setSelectedDate(maxDate);
     }
   }, [data]);
+
+  // Fonction pour sélectionner un point sur la carte
+  const handlePointClick = (point) => {
+    setSelectedPoint(point); // Mise à jour du point sélectionné
+    console.log(point);
+  };
 
 
   // Afficher la carte quand les données sont disponibles
   return (
-    <div>
-      <h1>World Map Visualization</h1>
-      <DateSlider selectedDate={selectedDate} setSelectedDate={setSelectedDate} data={data} />
-      {worldgeomap && metadata.length > 0 && data.length > 0 ? (
-        <Map worldData={worldgeomap} metadata={metadata} data={data} selectedDate={selectedDate} />
-      ) : (
-        <p>Loading map data...</p>
-      )}
+    <div className="app-container">
+      {/* Panneau de gauche */}
+      <div className="left-panel">
+        <div className="top-left">
+          {/* Affichage du titre et du date chooser */}
+          <h1>World Map Visualization</h1>
+          <DateSlider selectedDate={selectedDate} setSelectedDate={setSelectedDate} data={data} />
+        </div>
+  
+        <div className="bottom-left">
+          {/* Affichage de la carte */}
+          {worldgeomap && metadata.length > 0 && data.length > 0 ? (
+            <div className="map-container">
+              <Map 
+                worldData={worldgeomap} 
+                metadata={metadata} 
+                data={data} 
+                selectedDate={selectedDate}
+                onPointClick={handlePointClick}
+               />
+            </div>
+          ) : (
+            <p>Loading map data...</p>
+          )}
+        </div>
+      </div>
+  
+      {/* Panneau de droite */}
+      <div className="right-panel">
+        <ShowPointInfo point={selectedPoint} />
+      </div>
     </div>
   );
 };

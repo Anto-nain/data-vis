@@ -6,7 +6,7 @@ import showPointInfo from './showpointinfo';
 // worldData est la géomap du monde
 // metadata est la metadata
 
-const Map = ({ worldData, metadata, data, selectedDate}) => { 
+const Map = ({ worldData, metadata, data, selectedDate, onPointClick}) => { 
   //console.log(selectedDate);
 
   //console.log(metadata) 
@@ -145,11 +145,7 @@ const Map = ({ worldData, metadata, data, selectedDate}) => {
         .attr("stroke", "#000")
         .attr("stroke-width", 0.5)
         .attr("cursor","pointer")
-        .on("click", (event, d) => {
-          if (showPointInfo) {
-            showPointInfo(d);
-          }
-        })
+        .on("click", (event, d) => onPointClick(d))
         .append("title")
         .text(d => `Point ID: ${d.point_id}`);
   
