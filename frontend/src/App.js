@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Map from './components/Map';
+import DateSlider from "./components/DateSlider";
 import * as d3 from 'd3';
 
 import worldgeomap from './data/world.json';
@@ -9,6 +10,8 @@ import datacsv from './data/data.csv';
 const App = () => {
   const [metadata, setMetadata] = useState([]);
   const [data, setData] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
+  //console.log(selectedDate);
   
   
   useEffect(() => {
@@ -41,13 +44,22 @@ const App = () => {
     });
   }, []);
 
+  // Sélectionner la première date disponible
+  useEffect(() => {
+    if (data.length > 0) {
+      const minDate = d3.min(data, d => d.date);
+      setSelectedDate(minDate);
+    }
+  }, [data]);
+
 
   // Afficher la carte quand les données sont disponibles
   return (
     <div>
       <h1>World Map Visualization</h1>
+      <DateSlider selectedDate={selectedDate} setSelectedDate={setSelectedDate} data={data} />
       {worldgeomap && metadata.length > 0 && data.length > 0 ? (
-        <Map worldData={worldgeomap} metadata={metadata} data={data} />
+        <Map worldData={worldgeomap} metadata={metadata} data={data} selectedDate={selectedDate} />
       ) : (
         <p>Loading map data...</p>
       )}

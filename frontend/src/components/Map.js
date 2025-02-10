@@ -1,13 +1,16 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import getHeightColorScale from './heightcolorscale';
+import showPointInfo from './showpointinfo';
 
 // worldData est la géomap du monde
 // metadata est la metadata
 
-const Map = ({ worldData, metadata, data}) => { 
-  console.log(metadata) 
-  console.log(data);
+const Map = ({ worldData, metadata, data, selectedDate}) => { 
+  //console.log(selectedDate);
+
+  //console.log(metadata) 
+  //console.log(data);
 
     useEffect(() => {
  
@@ -59,23 +62,77 @@ const Map = ({ worldData, metadata, data}) => {
       const pointsData = metadata.map((point) => {
         const pointData = data.filter(d => d.point_id == point.point_id);
 
-        // Hauteur sélectionnée par date (la plus récente pour l'instant)
-        const selectedData = d3.max(pointData, d => d.date);        
-        const currentHeight = pointData.find(d => d.date == selectedData).height;
+        // Filtrer les données jusqu'à la date sélectionnée incluse
+        //console.log(selectedDate);
+        //console.log(pointData);
+        const validData = pointData.filter(d => d.date <= new Date(selectedDate));
+        //console.log(validData);
 
-        // série des hauteurs
+        if (validData.length === 0) {
+          return null; // Exclure ce point s'il n'a pas de valeur avant ou à la date sélectionnée
+        }
+
+        // Trouver la dernière hauteur d'eau connue avant ou à la date sélectionnée
+        const lastData = d3.max(validData, d => d.date);
+        const currentHeight = pointData.find(d => d.date.getTime() === lastData.getTime()).height;
+
+        // Série des hauteurs et des dates associées
         const heightSerie = pointData.map(d => d.height);
-      
+        const timeSerie = pointData.map(d => d.date);
+
         return {
           ...point,
           currentHeight,
           heightSerie,
+          timeSerie,
         };
-      });
+      }).filter(d => d !== null); // Supprimer les points sans données valides
+
+/*
+      // création de la heatmap
+      const gridSize = 10;
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+
+      // Créer une grille de points (heatmap) uniquement sur la terre
+      for (let x = 0; x < width; x += gridSize) {
+        for (let y = 0; y < height; y += gridSize) {
+          const [lon, lat] = projection.invert([x, y]); // Convertir en coord. géo
+
+          // Vérifier si le point est sur la terre
+          const isOnLand = worldData.features.some(feature => d3.geoContains(feature, [lon, lat]));
+          if (!isOnLand) continue; // On ignore l'eau
+
+          // Trouver le point de mesure le plus proche
+          const nearestPoint = pointsData.reduce((prev, curr) => {
+            const prevDist = Math.hypot(prev.geometry0 - lon, prev.geometry1 - lat);
+            const currDist = Math.hypot(curr.geometry0 - lon, curr.geometry1 - lat);
+            return currDist < prevDist ? curr : prev;
+          });
+
+          // Récupérer la couleur
+          const color = colorScale(getHeightColorScale(nearestPoint.currentHeight, pointsData.map(p => p.currentHeight)));
+
+          // Dessiner sur le canvas
+          ctx.fillStyle = color;
+          ctx.fillRect(x, y, gridSize, gridSize);
+        }
+      }
+
+      // Convertir le canvas en image DataURL
+      const heatmapImage = canvas.toDataURL();
+
+      // Appliquer comme fond du SVG
+      d3.select("#map")
+        .style("background", `url(${heatmapImage})`)
+        .style("background-size", "cover");
+      
+      */
+
     
 
-
-        
       // Plot data points
       g.selectAll("circle")
         .data(pointsData)
@@ -87,10 +144,16 @@ const Map = ({ worldData, metadata, data}) => {
         .attr("fill", d => colorScale(getHeightColorScale(d.currentHeight, d.heightSerie)))
         .attr("stroke", "#000")
         .attr("stroke-width", 0.5)
+        .attr("cursor","pointer")
+        .on("click", (event, d) => {
+          if (showPointInfo) {
+            showPointInfo(d);
+          }
+        })
         .append("title")
         .text(d => `Point ID: ${d.point_id}`);
   
-    }, [worldData, metadata]); // Runs when data updates
+    }, [worldData, metadata, data, selectedDate]); // Runs when data updates
   
     return <svg id="map"></svg>;
   };
