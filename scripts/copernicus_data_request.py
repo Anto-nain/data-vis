@@ -2,7 +2,7 @@ import requests
 import pandas as pd
 
 
-number_of_files = 100
+number_of_files = 1000
 counter = 0
 
 
