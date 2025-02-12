@@ -3,6 +3,7 @@ import './App.css';
 import Map from './components/Map';
 import DateSlider from "./components/DateSlider";
 import ShowPointInfo from "./components/showpointinfo";
+import ColorLegend from './components/colorlegend';
 import * as d3 from 'd3';
 
 import worldgeomap from './data/carte_light.geo.json';
@@ -65,17 +66,15 @@ const App = () => {
   // Afficher la carte quand les données sont disponibles
   return (
     <div className="app-container">
-      {/* Panneau de gauche */}
       <div className="left-panel">
         <div className="top-left">
-          {/* Affichage du titre et du date chooser */}
           <h1 style={{ textAlign: 'center' }}>World Map Visualization</h1>
           <DateSlider selectedDate={selectedDate} setSelectedDate={setSelectedDate} data={data} />
         </div>
   
         <div className="bottom-left">
-          {/* Affichage de la carte */}
-          {worldgeomap && metadata.length > 0 && data.length > 0 ? (
+        {worldgeomap && metadata.length > 0 && data.length > 0 ? (
+          <div className="map-wrapper">
             <div className="map-container">
               <Map 
                 worldData={worldgeomap} 
@@ -83,15 +82,18 @@ const App = () => {
                 data={data} 
                 selectedDate={selectedDate}
                 onPointClick={handlePointClick}
-               />
+              />
             </div>
-          ) : (
-            <p>Loading map data...</p>
-          )}
-        </div>
+            <div className="legend-container">
+              <ColorLegend />
+            </div>
+          </div>
+        ) : (
+          <p>Loading map data...</p>
+        )}
+      </div>
       </div>
   
-      {/* Panneau de droite */}
       <div className="right-panel">
         <ShowPointInfo point={selectedPoint} />
       </div>
