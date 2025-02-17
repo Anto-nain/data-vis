@@ -69,12 +69,15 @@ const Map = ({ worldData, metadata, data, selectedDate, onPointClick}) => {
         // Série des hauteurs et des dates associées
         const heightSerie = pointData.map(d => d.height);
         const timeSerie = pointData.map(d => d.date);
+        const global_data = pointData.map(d => d);
 
         return {
           ...point,
           currentHeight,
+          currentDate: lastData,
           heightSerie,
           timeSerie,
+          global_data
         };
       }).filter(d => d !== null); // Supprimer les points sans données valides
 
@@ -89,7 +92,7 @@ const Map = ({ worldData, metadata, data, selectedDate, onPointClick}) => {
           // Calculer la couleur moyenne des points du pays
           const avgColor = d3.mean(countryPoints, point => getHeightColorScale(point.currentHeight, point.heightSerie));
           countryColors[country.properties.name] = colorScale(avgColor);
-          console.log(country.properties.name);
+          //console.log(country.properties.name);
         }
         else {
           countryColors[country.properties.name] = "#ccc"; // Couleur par défaut

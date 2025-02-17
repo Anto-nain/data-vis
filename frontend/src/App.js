@@ -58,9 +58,10 @@ const App = () => {
 
   // Fonction pour sélectionner un point sur la carte
   const handlePointClick = (point) => {
-    setSelectedPoint(point,selectedDate); // Mise à jour du point sélectionné
+    setSelectedPoint(point); // Mise à jour du point sélectionné
     //console.log(point);
   };
+  
 
 
   // Afficher la carte quand les données sont disponibles
@@ -95,7 +96,7 @@ const App = () => {
       </div>
   
       <div className="right-panel">
-        <ShowPointInfo point={selectedPoint} />
+        <ShowPointInfo point={selectedPoint} selectedDate={selectedDate} />
       </div>
     </div>
   );

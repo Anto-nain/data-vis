@@ -9,6 +9,7 @@
 
 .left-panel, .right-panel {
   display: flex;
+  width:100%;
   flex-direction: column;
   box-sizing: border-box; /* Assure que padding et bordure sont inclus dans la largeur/hauteur */
 }
@@ -24,13 +25,15 @@
 
 .right-panel {
   padding: 10px;
+  height: 100%;
+  width:40%;
   display: flex;
-  flex-direction: column;
   flex-direction: column;
   justify-content: flex-start; /* Aligne les éléments en haut */
 }
 
 .top-right {
+  flex: 4;
   padding: 10px;
   background-color: #f1f1f1;
   border-radius: 8px;
@@ -85,16 +88,14 @@
 
 }
 
-/* Conteneurs de métadonnées et SVG */
 .top-right, .bottom-right {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 50%; /* Divise l'espace verticalement en deux parties égales */
+  flex-grow: 1; /* Allow both sections to expand */
+  overflow: hidden; /* Prevent content overflow */
+  width: 250%; /* Take full width */
 }
-
-
+  
 .bottom-right {
+  flex:2;
   background-color: #f1f1f1;
   padding: 10px;
   border-radius: 8px;
