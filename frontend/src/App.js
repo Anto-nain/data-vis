@@ -69,7 +69,7 @@ const App = () => {
     <div className="app-container">
       <div className="left-panel">
         <div className="top-left">
-          <h1 style={{ textAlign: 'center' }}>World Map Visualization</h1>
+          <h1 style={{ textAlign: 'center' }}>River Level Monitoring</h1>
           <DateSlider selectedDate={selectedDate} setSelectedDate={setSelectedDate} data={data} />
         </div>
   
